@@ -1,10 +1,12 @@
 import json
-from adapters.base_reader import FileReader
+from readers.base_reader import FileReader
 
-class JSONAdapter(FileReader):
+
+class JSONReader(FileReader):
     """
     Reads JSON files and normalizes them into a Python dict.
     """
+
     def __init__(self, path):
         self.path = path
 
@@ -12,7 +14,4 @@ class JSONAdapter(FileReader):
         with open(self.path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        return {
-            "type": "json",
-            "data": data
-        }
+        return {"type": "json", "data": data}

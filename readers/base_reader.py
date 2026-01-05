@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-class ConverterFactory(ABC):
 
+class FileReader(ABC):
     @abstractmethod
-    def create(output_format: str):
+    def read(self):
         pass

@@ -1,4 +1,7 @@
-class FileWriter:
+from abc import ABC, abstractmethod
 
+
+class FileWriter(ABC):
+    @abstractmethod
     def write(self, data: dict, output_path: str):
-        raise NotImplementedError("write() must be implemented in subclasses")
+        pass

@@ -1,7 +1,8 @@
-from adapters.base_reader import FileReader
+from readers.base_reader import FileReader
 
-class TXTAdapter(FileReader):
-    
+
+class TXTReader(FileReader):
+
     def __init__(self, path):
         self.path = path
 
@@ -9,7 +10,4 @@ class TXTAdapter(FileReader):
         with open(self.path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        return {
-            "type": "text",
-            "content": content
-        }
+        return {"type": "text", "content": content}

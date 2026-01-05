@@ -1,8 +1,8 @@
 import pdfplumber
-from adapters.base_reader import FileReader
+from readers.base_reader import FileReader
 
 
-class PDFAdapter(FileReader):
+class PDFReader(FileReader):
 
     def __init__(self, path: str):
         self.path = path
@@ -18,7 +18,4 @@ class PDFAdapter(FileReader):
 
         content = "\n".join(text_pages)
 
-        return {
-            "type": "text",
-            "content": content
-        }
+        return {"type": "text", "content": content}

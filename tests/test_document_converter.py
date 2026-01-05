@@ -1,5 +1,6 @@
 from core.document_converter import DocumentConverter
 
+
 def test_convert_txt_to_json(tmp_path):
     input_file = tmp_path / "input.txt"
     input_file.write_text("Hello conversion")
@@ -8,13 +9,12 @@ def test_convert_txt_to_json(tmp_path):
 
     converter = DocumentConverter()
     result = converter.convert_file(
-        input_path=str(input_file),
-        output_format="json",
-        output_path=str(output_file)
+        input_path=str(input_file), output_format="json", output_path=str(output_file)
     )
 
     assert output_file.exists()
     assert result == str(output_file)
+
 
 def test_convert_folder(tmp_path):
     # Create input files
@@ -27,9 +27,7 @@ def test_convert_folder(tmp_path):
 
     converter = DocumentConverter()
     results = converter.convert_folder(
-        folder_path=str(tmp_path),
-        output_format="json",
-        output_dir=str(output_dir)
+        folder_path=str(tmp_path), output_format="json", output_dir=str(output_dir)
     )
 
     assert len(results) == 2

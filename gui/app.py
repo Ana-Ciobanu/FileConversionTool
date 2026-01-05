@@ -3,7 +3,7 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 
 from tkinterdnd2 import DND_FILES, TkinterDnD
-from core.document_converter import DocumentConverter
+from core.conversion_facade import FileConversionFacade
 
 
 class App(ctk.CTk):
@@ -11,25 +11,22 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # WINDOW CONFIG 
+        # WINDOW CONFIG
         self.title("File Conversion Tool")
         self.geometry("700x500")
         self.minsize(600, 450)
         self.resizable(True, True)
 
-        # CORE 
-        self.converter = DocumentConverter()
+        # CORE
+        self.converter = FileConversionFacade()
         self.selected_file = None
         self.selected_folder = None
 
         # SCROLLABLE CONTAINER
-        self.container = ctk.CTkScrollableFrame(
-            self,
-            corner_radius=10
-        )
+        self.container = ctk.CTkScrollableFrame(self, corner_radius=10)
         self.container.pack(fill="both", expand=True, padx=20, pady=20)
 
-        # BUILD UI 
+        # BUILD UI
         self._build_ui()
         self._enable_drag_and_drop()
 
@@ -39,7 +36,7 @@ class App(ctk.CTk):
         title = ctk.CTkLabel(
             self.container,
             text="File Conversion Tool",
-            font=ctk.CTkFont(size=24, weight="bold")
+            font=ctk.CTkFont(size=24, weight="bold"),
         )
         title.pack(pady=(10, 20))
 
@@ -50,49 +47,35 @@ class App(ctk.CTk):
             fg_color=("gray85", "gray25"),
             corner_radius=10,
             width=500,
-            height=80
+            height=80,
         )
         self.drop_label.pack(pady=10)
 
         # File selection
-        self.file_label = ctk.CTkLabel(
-            self.container,
-            text="No file selected"
-        )
+        self.file_label = ctk.CTkLabel(self.container, text="No file selected")
         self.file_label.pack(pady=(20, 5))
 
         ctk.CTkButton(
-            self.container,
-            text="Select File",
-            command=self.select_file,
-            width=200
+            self.container, text="Select File", command=self.select_file, width=200
         ).pack(pady=5)
 
         # Folder selection
-        self.folder_label = ctk.CTkLabel(
-            self.container,
-            text="No folder selected"
-        )
+        self.folder_label = ctk.CTkLabel(self.container, text="No folder selected")
         self.folder_label.pack(pady=(20, 5))
 
         ctk.CTkButton(
-            self.container,
-            text="Select Folder",
-            command=self.select_folder,
-            width=200
+            self.container, text="Select Folder", command=self.select_folder, width=200
         ).pack(pady=5)
 
         # Output format
         ctk.CTkLabel(
             self.container,
             text="Select output format:",
-            font=ctk.CTkFont(size=14, weight="bold")
+            font=ctk.CTkFont(size=14, weight="bold"),
         ).pack(pady=(30, 5))
 
         self.format_dropdown = ctk.CTkComboBox(
-            self.container,
-            values=["txt", "csv", "json", "pdf"],
-            width=200
+            self.container, values=["txt", "csv", "json", "pdf", "docx"], width=200
         )
         self.format_dropdown.set("txt")
         self.format_dropdown.pack(pady=5)
@@ -102,24 +85,19 @@ class App(ctk.CTk):
             self.container,
             text="Convert Selected File",
             command=self.convert_file,
-            width=260
+            width=260,
         ).pack(pady=(30, 10))
 
         ctk.CTkButton(
             self.container,
             text="Convert Entire Folder",
             command=self.convert_folder,
-            width=260
+            width=260,
         ).pack(pady=5)
 
         # Status
-        self.status_label = ctk.CTkLabel(
-            self.container,
-            text="",
-            wraplength=500
-        )
+        self.status_label = ctk.CTkLabel(self.container, text="", wraplength=500)
         self.status_label.pack(pady=(30, 20))
-
 
     # DRAG & DROP
     def _enable_drag_and_drop(self):
@@ -149,7 +127,6 @@ class App(ctk.CTk):
         else:
             messagebox.showerror("Error", "Unsupported drop item")
 
-
     # ACTIONS
     def select_file(self):
         path = filedialog.askopenfilename()
@@ -174,13 +151,10 @@ class App(ctk.CTk):
 
         try:
             output = self.converter.convert_file(
-                input_path=self.selected_file,
-                output_format=self.format_dropdown.get()
+                input_path=self.selected_file, output_format=self.format_dropdown.get()
             )
 
-            self.status_label.configure(
-                text=f"Successfully converted to:\n{output}"
-            )
+            self.status_label.configure(text=f"Successfully converted to:\n{output}")
             self._scroll_to_bottom()
 
         except Exception as e:
@@ -197,7 +171,7 @@ class App(ctk.CTk):
             results = self.converter.convert_folder(
                 folder_path=self.selected_folder,
                 output_format=self.format_dropdown.get(),
-                output_dir=output_dir
+                output_dir=output_dir,
             )
 
             self.status_label.configure(

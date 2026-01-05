@@ -1,7 +1,8 @@
 import csv
-from adapters.base_reader import FileReader
+from readers.base_reader import FileReader
 
-class CSVAdapter(FileReader):
+
+class CSVReader(FileReader):
 
     def __init__(self, path):
         self.path = path
@@ -13,7 +14,4 @@ class CSVAdapter(FileReader):
             for row in reader:
                 rows.append(row)
 
-        return {
-            "type": "table",
-            "rows": rows
-        }
+        return {"type": "table", "rows": rows}

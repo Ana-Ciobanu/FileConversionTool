@@ -1,10 +1,12 @@
 from docx import Document
-from adapters.base_reader import FileReader
+from readers.base_reader import FileReader
 
-class DOCXAdapter(FileReader):
+
+class DOCXReader(FileReader):
     """
     Reads Microsoft Word (.docx) files and returns their textual content.
     """
+
     def __init__(self, path):
         self.path = path
 
@@ -14,7 +16,4 @@ class DOCXAdapter(FileReader):
 
         content = "\n".join(paragraphs)
 
-        return {
-            "type": "text",
-            "content": content
-        }
+        return {"type": "text", "content": content}

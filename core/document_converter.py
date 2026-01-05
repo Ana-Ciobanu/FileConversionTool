@@ -1,13 +1,8 @@
 import os
 
 from utils.file_type_detector import FileTypeDetector
-from factory.converter_factory import ConverterFactory
-
-from adapters.txt_adapter import TXTAdapter
-from adapters.csv_adapter import CSVAdapter
-from adapters.json_adapter import JSONAdapter
-from adapters.docx_adapter import DOCXAdapter
-from adapters.pdf_adapter import PDFAdapter
+from factory.reader_factory import ReaderFactory
+from factory.writer_factory import WriterFactory
 
 
 class DocumentConverter:
@@ -15,19 +10,8 @@ class DocumentConverter:
     Central controller responsible for orchestrating the conversion process.
     """
 
-    _ADAPTER_MAP = {
-        "txt": TXTAdapter,
-        "csv": CSVAdapter,
-        "json": JSONAdapter,
-        "docx": DOCXAdapter,
-        "pdf": PDFAdapter,
-    }
-
     def convert_file(
-        self,
-        input_path: str,
-        output_format: str,
-        output_path: str | None = None
+        self, input_path: str, output_format: str, output_path: str | None = None
     ) -> str:
         """
         Convert a single file into the target format.
@@ -42,17 +26,10 @@ class DocumentConverter:
             raise FileNotFoundError(f"Input file not found: {input_path}")
 
         input_ext = FileTypeDetector.get_extension(input_path)
-        adapter_cls = self._ADAPTER_MAP.get(input_ext)
-
-        if not adapter_cls:
-            raise ValueError(f"Unsupported input format: {input_ext}")
-
-        # Read input via Adapter
-        reader = adapter_cls(input_path)
+        reader = ReaderFactory.create(input_ext, input_path)
         normalized_data = reader.read()
 
-        # Create writer via Factory Method
-        writer = ConverterFactory.create(output_format)
+        writer = WriterFactory.create(output_format)
 
         # Build output path
         if output_path is None:
@@ -65,10 +42,7 @@ class DocumentConverter:
         return output_path
 
     def convert_folder(
-        self,
-        folder_path: str,
-        output_format: str,
-        output_dir: str | None = None
+        self, folder_path: str, output_format: str, output_dir: str | None = None
     ) -> list[str]:
         """
         Convert all supported files inside a folder.
@@ -104,7 +78,7 @@ class DocumentConverter:
                 result = self.convert_file(
                     input_path=input_path,
                     output_format=output_format,
-                    output_path=output_path
+                    output_path=output_path,
                 )
 
                 converted_files.append(result)

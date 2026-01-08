@@ -1,9 +1,9 @@
 from table_extractors.pdfplumber_extractor import PdfPlumberTableExtractor
 
+
 class TableExtractorFactory:
     _MAP = {
         "pdfplumber": PdfPlumberTableExtractor,
-        # "camelot": CamelotTableExtractor,  # later
     }
 
     @staticmethod

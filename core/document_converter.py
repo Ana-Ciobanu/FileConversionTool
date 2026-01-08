@@ -1,4 +1,5 @@
 import os
+import logging
 
 from utils.file_type_detector import FileTypeDetector
 from factory.reader_factory import ReaderFactory
@@ -85,6 +86,6 @@ class DocumentConverter:
 
             except Exception as e:
                 # Skip unsupported or failed files gracefully
-                print(f"Skipping {filename}: {e}")
+                logging.warning(f"Skipping {filename}: {e}")
 
         return converted_files

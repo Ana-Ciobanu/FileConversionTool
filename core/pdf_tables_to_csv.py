@@ -14,10 +14,7 @@ class PdfTablesToCsvService:
         self._extractor = TableExtractorFactory.create(engine)
 
     def extract_all(
-        self,
-        pdf_path: str,
-        output_dir: str,
-        base_filename: Optional[str] = None
+        self, pdf_path: str, output_dir: str, base_filename: Optional[str] = None
     ) -> List[str]:
         """
         Extracts tables from pdf_path and writes them to output_dir as:

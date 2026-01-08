@@ -3,6 +3,7 @@ from readers.base_reader import FileReader
 
 
 class PDFReader(FileReader):
+    supported_outputs = ["txt", "docx"]
 
     def __init__(self, path: str):
         self.path = path

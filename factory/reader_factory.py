@@ -4,6 +4,7 @@ from readers.json_reader import JSONReader
 from readers.pdf_reader import PDFReader
 from readers.docx_reader import DOCXReader
 from factory.converter_factory import ConverterFactory
+from utils.file_type_detector import FileTypeDetector
 
 
 class ReaderFactory(ConverterFactory):
@@ -33,3 +34,11 @@ class ReaderFactory(ConverterFactory):
             raise ValueError(f"Unsupported input format: {input_format}")
 
         return reader_cls(path)
+    
+    @classmethod
+    def supported_outputs_for(cls, input_path: str) -> list[str]:
+        ext = FileTypeDetector.get_extension(input_path)
+        reader_cls = cls._READER_MAP.get(ext.lower())
+        if not reader_cls:
+            return []
+        return list(reader_cls.supported_outputs)

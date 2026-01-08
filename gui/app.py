@@ -95,6 +95,14 @@ class App(ctk.CTk):
             width=260,
         ).pack(pady=5)
 
+        # PDF Tables to CSV Button
+        ctk.CTkButton(
+            self.container,
+            text="Extract PDF Tables to CSV",
+            command=self.extract_pdf_tables_to_csv,
+            width=260,
+        ).pack(pady=(20, 10))
+
         # Status
         self.status_label = ctk.CTkLabel(self.container, text="", wraplength=500)
         self.status_label.pack(pady=(30, 20))
@@ -187,3 +195,26 @@ class App(ctk.CTk):
         Automatically scrolls to the bottom of the scrollable frame.
         """
         self.container._parent_canvas.yview_moveto(1.0)
+
+    def extract_pdf_tables_to_csv(self):
+        if not self.selected_file or not self.selected_file.lower().endswith(".pdf"):
+            messagebox.showerror("Error", "Please select a PDF file first.")
+            return
+
+        output_dir = filedialog.askdirectory(title="Select Output Directory for CSVs")
+        if not output_dir:
+            return
+
+        try:
+            output_files = self.converter.extract_pdf_tables_to_csv(
+                pdf_path=self.selected_file,
+                output_dir=output_dir
+            )
+            if output_files:
+                msg = f"Extracted {len(output_files)} tables to CSV files:\n" + "\n".join(output_files)
+            else:
+                msg = "No tables found in the PDF."
+            self.status_label.configure(text=msg)
+            self._scroll_to_bottom()
+        except Exception as e:
+            messagebox.showerror("PDF Table Extraction Error", str(e))

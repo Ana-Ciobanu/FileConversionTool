@@ -5,9 +5,10 @@ from readers.json_reader import JSONReader
 from readers.pdf_reader import PDFReader
 from readers.docx_reader import DOCXReader
 from utils.file_type_detector import FileTypeDetector
+from core.transformers.transformer_registry import get_transformer
 
 
-class ReaderFactory():
+class ReaderFactory:
 
     _READER_MAP = {
         "txt": TXTReader,
@@ -34,7 +35,7 @@ class ReaderFactory():
             raise ValueError(f"Unsupported input format: {input_format}")
 
         return reader_cls(path)
-    
+
     @classmethod
     def supported_outputs_for_path(cls, input_path: str) -> list[str]:
         ext = FileTypeDetector.get_extension(input_path)
@@ -47,4 +48,11 @@ class ReaderFactory():
         if not reader_cls:
             return []
         output_type = getattr(reader_cls, "output_type", "")
-        return WriterFactory.formats_supporting(output_type)
+        # Directly supported formats
+        formats = set(WriterFactory.formats_supporting(output_type))
+        # Add formats possible via transformers
+        for fmt, writer_cls in WriterFactory._WRITER_MAP.items():
+            for supported_type in getattr(writer_cls, "supported_input_types", set()):
+                if get_transformer(output_type, supported_type):
+                    formats.add(fmt)
+        return sorted(formats)

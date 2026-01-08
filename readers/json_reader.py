@@ -6,6 +6,7 @@ class JSONReader(FileReader):
     """
     Reads JSON files and normalizes them into a Python dict.
     """
+
     output_type = "json"
 
     def __init__(self, path):

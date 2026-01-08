@@ -6,8 +6,9 @@ class DOCXReader(FileReader):
     """
     Reads Microsoft Word (.docx) files and returns their textual content.
     """
+
     output_type = "text"
-    
+
     def __init__(self, path):
         self.path = path
 

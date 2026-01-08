@@ -23,6 +23,8 @@ class DocumentConverter:
         :return: Path to converted file
         """
 
+        from core.transformers.transformer_registry import get_transformer
+
         if not os.path.isfile(input_path):
             raise FileNotFoundError(f"Input file not found: {input_path}")
 
@@ -31,6 +33,22 @@ class DocumentConverter:
         normalized_data = reader.read()
 
         writer = WriterFactory.create(output_format)
+        writer_supported_types = getattr(writer, "supported_input_types", set())
+        data_type = normalized_data.get("type")
+
+        # If the writer does not support the data type, try to transform
+        if writer_supported_types and data_type not in writer_supported_types:
+            # Try to find a transformer
+            for supported_type in writer_supported_types:
+                transformer = get_transformer(data_type, supported_type)
+                if transformer:
+                    normalized_data = transformer.transform(normalized_data)
+                    data_type = normalized_data.get("type")
+                    break
+            else:
+                raise ValueError(
+                    f"No transformer found to convert {data_type} to one of {writer_supported_types}"
+                )
 
         # Build output path
         if output_path is None:

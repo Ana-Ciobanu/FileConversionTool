@@ -5,7 +5,7 @@ from writers.pdf_writer import PDFWriter
 from writers.docx_writer import DOCXWriter
 
 
-class WriterFactory():
+class WriterFactory:
     """
     Factory Method responsible for creating the correct FileWriter
     based on the desired output format.
@@ -35,7 +35,7 @@ class WriterFactory():
             raise ValueError(f"Unsupported output format: {output_format}")
 
         return writer_cls()
-    
+
     @classmethod
     def supported_formats(cls) -> list[str]:
         return sorted(cls._WRITER_MAP.keys())

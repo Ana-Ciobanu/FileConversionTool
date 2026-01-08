@@ -6,6 +6,7 @@ class TXTWriter(FileWriter):
     Writes text-based content to a .txt file.
     Works with data produced by TXT, DOCX, and PDF adapters.
     """
+
     supported_input_types = {"text"}
 
     def write(self, data: dict, output_path: str):

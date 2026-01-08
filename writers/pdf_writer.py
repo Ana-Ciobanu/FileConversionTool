@@ -8,6 +8,7 @@ class PDFWriter(FileWriter):
     Writes text content to a PDF file.
     Supports text-based data only.
     """
+
     supported_input_types = {"text"}
 
     def write(self, data: dict, output_path: str):

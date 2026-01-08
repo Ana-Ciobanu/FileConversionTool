@@ -3,10 +3,9 @@ from writers.csv_writer import CSVWriter
 from writers.json_writer import JSONWriter
 from writers.pdf_writer import PDFWriter
 from writers.docx_writer import DOCXWriter
-from factory.converter_factory import ConverterFactory
 
 
-class WriterFactory(ConverterFactory):
+class WriterFactory():
     """
     Factory Method responsible for creating the correct FileWriter
     based on the desired output format.
@@ -36,3 +35,16 @@ class WriterFactory(ConverterFactory):
             raise ValueError(f"Unsupported output format: {output_format}")
 
         return writer_cls()
+    
+    @classmethod
+    def supported_formats(cls) -> list[str]:
+        return sorted(cls._WRITER_MAP.keys())
+
+    @classmethod
+    def formats_supporting(cls, input_type: str) -> list[str]:
+        input_type = (input_type or "").strip().lower()
+        formats = []
+        for fmt, writer_cls in cls._WRITER_MAP.items():
+            if input_type in getattr(writer_cls, "supported_input_types", set()):
+                formats.append(fmt)
+        return sorted(formats)

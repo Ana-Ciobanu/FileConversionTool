@@ -6,6 +6,7 @@ class CSVWriter(FileWriter):
     """
     Writes tabular data to a .csv file.
     """
+    supported_input_types = {"table"}
 
     def write(self, data: dict, output_path: str):
         if data.get("type") != "table":

@@ -3,7 +3,7 @@ from readers.base_reader import FileReader
 
 
 class CSVReader(FileReader):
-    supported_outputs = ["json", "txt"]
+    output_type = "table"
 
     def __init__(self, path):
         self.path = path

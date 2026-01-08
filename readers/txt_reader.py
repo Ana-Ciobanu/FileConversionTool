@@ -2,7 +2,7 @@ from readers.base_reader import FileReader
 
 
 class TXTReader(FileReader):
-    supported_outputs = ["pdf", "docx"]
+    output_type = "text"
 
     def __init__(self, path):
         self.path = path

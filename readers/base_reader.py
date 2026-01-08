@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class FileReader(ABC):
-    supported_outputs: list[str] = []
+    output_type: str = ""  # "text" | "table" | "json"
     
     @abstractmethod
     def read(self):

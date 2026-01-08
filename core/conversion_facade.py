@@ -18,4 +18,7 @@ class FileConversionFacade:
         return self.converter.convert_folder(folder_path, output_format, output_dir)
     
     def supported_output_formats(self, input_path: str) -> list[str]:
-        return ReaderFactory.supported_outputs_for(input_path)
+        return ReaderFactory.supported_outputs_for_path(input_path)
+
+    def supported_output_formats_for_extension(self, ext: str) -> list[str]:
+        return ReaderFactory.supported_outputs_for_extension(ext)

@@ -351,7 +351,7 @@ class App(ctk.CTk):
                 return
 
             supported_sets = [
-                set(FileConversionFacade.supported_output_formats(ext))
+                set(self.converter.supported_output_formats_for_extension(ext))
                 for ext in exts
             ]
 

@@ -7,6 +7,7 @@ class JSONWriter(FileWriter):
     Writes data to a .json file.
     Supports both table and JSON input formats.
     """
+    supported_input_types = {"json", "table", "text"}
 
     def write(self, data: dict, output_path: str):
         payload = {}

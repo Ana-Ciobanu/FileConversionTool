@@ -7,6 +7,7 @@ class DOCXWriter(FileWriter):
     Writes text or table data to a .docx file.
     Supports data from TXT, DOCX, PDF (as text), and CSV (as table).
     """
+    supported_input_types = {"text", "table"}
 
     def write(self, data: dict, output_path: str):
         doc = Document()

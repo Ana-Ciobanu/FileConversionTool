@@ -357,7 +357,9 @@ class App(ctk.CTk):
             # If a folder is selected, do not exclude any format
             input_ext = None
 
-        filtered_formats = [f for f in formats if f != input_ext] if input_ext else formats
+        filtered_formats = (
+            [f for f in formats if f != input_ext] if input_ext else formats
+        )
         if not filtered_formats:
             filtered_formats = [f for f in formats]  # fallback to all if nothing left
 

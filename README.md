@@ -62,7 +62,7 @@ FileConversionTool/
    ```
 2. **Run the application:**
    ```bash
-   py -m main
+   py main.py
    ```
 
 ## Testing

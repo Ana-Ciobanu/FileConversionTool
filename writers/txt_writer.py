@@ -1,4 +1,5 @@
 from writers.base_writer import FileWriter
+import logging
 
 
 class TXTWriter(FileWriter):
@@ -12,6 +13,9 @@ class TXTWriter(FileWriter):
     def write(self, data: dict, output_path: str):
         if data.get("type") != "text":
             raise ValueError("TXTWriter supports only text data")
-
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(data.get("content", ""))
+        try:
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(data.get("content", ""))
+        except Exception as e:
+            logging.error(f"Failed to write TXT file {output_path}: {e}")
+            raise

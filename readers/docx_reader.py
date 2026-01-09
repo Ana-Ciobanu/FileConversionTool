@@ -1,4 +1,5 @@
 from docx import Document
+import logging
 from readers.base_reader import FileReader
 
 
@@ -13,9 +14,11 @@ class DOCXReader(FileReader):
         self.path = path
 
     def read(self):
-        doc = Document(self.path)
-        paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
-
+        try:
+            doc = Document(self.path)
+            paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+        except Exception as e:
+            logging.error(f"Failed to read DOCX file {self.path}: {e}")
+            raise
         content = "\n".join(paragraphs)
-
         return {"type": "text", "content": content}

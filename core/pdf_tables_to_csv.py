@@ -1,5 +1,6 @@
 import os
 import csv
+import logging
 from typing import List, Optional
 
 from factory.table_extractor_factory import TableExtractorFactory
@@ -27,7 +28,12 @@ class PdfTablesToCsvService:
 
         os.makedirs(output_dir, exist_ok=True)
 
-        tables = self._extractor.extract_tables(pdf_path)
+        try:
+            tables = self._extractor.extract_tables(pdf_path)
+        except Exception as e:
+            logging.error(f"Failed to extract tables from PDF {pdf_path}: {e}")
+            raise
+
         if not base_filename:
             base_filename = os.path.splitext(os.path.basename(pdf_path))[0]
 
@@ -36,12 +42,14 @@ class PdfTablesToCsvService:
         for global_idx, table in enumerate(tables, start=1):
             filename = f"{base_filename}_table_{global_idx:03d}_p{table.page}.csv"
             out_path = os.path.join(output_dir, filename)
-
-            with open(out_path, "w", newline="", encoding="utf-8") as f:
-                writer = csv.writer(f)
-                for row in table.rows:
-                    writer.writerow(row)
-
+            try:
+                with open(out_path, "w", newline="", encoding="utf-8") as f:
+                    writer = csv.writer(f)
+                    for row in table.rows:
+                        writer.writerow(row)
+            except Exception as e:
+                logging.error(f"Failed to write CSV file {out_path}: {e}")
+                raise
             output_files.append(out_path)
 
         return output_files
